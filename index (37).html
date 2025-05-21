@@ -1,0 +1,971 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chương Trình Hè 2025 - Công Ty TNHH Giáo Dục Harvard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+        
+        :root {
+            --primary: #2E3192;
+            --secondary: #FF9E1B;
+            --accent: #00A651;
+            --light: #F5F9FF;
+            --dark: #333333;
+            --white: #FFFFFF;
+            --gradient-primary: linear-gradient(135deg, #2E3192, #1BBBFF);
+            --gradient-secondary: linear-gradient(135deg, #FF9E1B, #FFD200);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            color: var(--white);
+        }
+        
+        .contact-info {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+        }
+        
+        .contact-item i {
+            font-size: 18px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: url('https://via.placeholder.com/1200x600') center/cover no-repeat;
+            background-blend-mode: overlay;
+            background-color: rgba(46, 49, 146, 0.85);
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 42px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-tagline {
+            font-size: 24px;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: var(--gradient-secondary);
+            color: var(--dark);
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 158, 27, 0.3);
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 158, 27, 0.4);
+        }
+        
+        /* Programs Section */
+        .programs {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 34px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--primary);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .program-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .program-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(46, 49, 146, 0.15);
+        }
+        
+        .program-img {
+            height: 220px;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        
+        .program-img-1 {
+            background-image: url('https://via.placeholder.com/400x320?text=Ban+Tru+He');
+        }
+        
+        .program-img-2 {
+            background-image: url('https://via.placeholder.com/400x320?text=Super+Camp');
+        }
+        
+        .program-img-3 {
+            background-image: url('https://via.placeholder.com/400x320?text=Ky+Nang');
+        }
+        
+        .program-content {
+            padding: 30px;
+        }
+        
+        .program-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .program-features {
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+        
+        .feature-icon {
+            color: var(--accent);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+        
+        /* Skills Section */
+        .skills {
+            padding: 80px 0;
+            background-color: #f0f5ff;
+        }
+        
+        .skill-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .skill-item {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(46, 49, 146, 0.15);
+        }
+        
+        .skill-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .skill-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .skill-description {
+            font-size: 15px;
+            color: #666;
+        }
+        
+        /* Benefits Section */
+        .benefits {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .benefit-content {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        
+        .benefit-image {
+            flex: 1;
+            min-width: 300px;
+            height: 400px;
+            background: url('https://via.placeholder.com/600x400?text=Benefits') center/cover no-repeat;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .benefit-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .benefit-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .benefit-description {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .benefit-list {
+            list-style: none;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        
+        .benefit-icon {
+            color: var(--accent);
+            font-size: 24px;
+        }
+        
+        .benefit-item-text {
+            font-size: 16px;
+            flex: 1;
+        }
+        
+        /* Promotion Section */
+        .promotion {
+            padding: 60px 0;
+            background: var(--gradient-primary);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .promotion-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .promotion-description {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .highlight {
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 700;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #1a1c4b;
+            color: var(--white);
+            padding: 50px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .footer-contact-icon {
+            color: var(--secondary);
+            font-size: 18px;
+            margin-top: 5px;
+        }
+        
+        .footer-contact-text {
+            font-size: 15px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+        }
+        
+        /* Registration Form */
+        .registration {
+            padding: 80px 0;
+            background-color: #f0f5ff;
+        }
+        
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus, .form-select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .form-col {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .submit-btn {
+            background: var(--gradient-secondary);
+            color: var(--dark);
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(255, 158, 27, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 158, 27, 0.4);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero-tagline {
+                font-size: 18px;
+            }
+            
+            .benefit-content {
+                flex-direction: column;
+            }
+            
+            .benefit-image {
+                width: 100%;
+                order: 2;
+            }
+            
+            .benefit-text {
+                order: 1;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero-tagline {
+                font-size: 16px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .animate-delay-1 {
+            animation-delay: 0.2s;
+        }
+        
+        .animate-delay-2 {
+            animation-delay: 0.4s;
+        }
+        
+        .animate-delay-3 {
+            animation-delay: 0.6s;
+        }
+        
+        /* Floating shapes */
+        .shape {
+            position: absolute;
+            z-index: 1;
+            opacity: 0.7;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .shape-1 {
+            top: 10%;
+            left: 5%;
+            width: 60px;
+            height: 60px;
+            background: var(--secondary);
+            border-radius: 50%;
+        }
+        
+        .shape-2 {
+            bottom: 15%;
+            right: 8%;
+            width: 80px;
+            height: 80px;
+            background: var(--accent);
+            border-radius: 12px;
+            transform: rotate(45deg);
+        }
+        
+        .shape-3 {
+            top: 60%;
+            left: 15%;
+            width: 40px;
+            height: 40px;
+            background: #1BBBFF;
+            border-radius: 8px;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">HARVARD EDUCATION</div>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>0975 917 397</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>ducharvard@gmail.com</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="container hero-content">
+            <h1 class="animate">MÙA HÈ BẮT ĐẦU – CHO CON BƯỚC RA KHỎI MÀN HÌNH, CHẠM VÀO THẾ GIỚI THẬT!</h1>
+            <p class="hero-tagline animate animate-delay-1">Hè này, đừng để con "ở nhà cùng chiếc điện thoại" – Hãy để con được sống, được trải nghiệm và lớn lên từng ngày!</p>
+            <a href="#register" class="btn animate animate-delay-2">ĐĂNG KÝ NGAY</a>
+        </div>
+    </section>
+    
+    <!-- Programs Section -->
+    <section class="programs" id="programs">
+        <div class="container">
+            <h2 class="section-title">HÀNH TRÌNH HÈ CỦA CON SẼ CÓ GÌ?</h2>
+            <div class="program-cards">
+                <!-- Program Card 1 -->
+                <div class="program-card animate">
+                    <div class="program-img program-img-1"></div>
+                    <div class="program-content">
+                        <h3 class="program-title">BÁN TRÚ HÈ</h3>
+                        <p>An toàn, khoa học, vui khỏe mỗi ngày</p>
+                        <div class="program-features">
+                            <div class="feature-item">
+                                <i class="fas fa-brain feature-icon"></i>
+                                <span>Học nhẹ nhàng các môn văn hóa</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-lightbulb feature-icon"></i>
+                                <span>Rèn kỹ năng sống – phát triển tư duy</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-paint-brush feature-icon"></i>
+                                <span>Tham gia nghệ thuật – vận động thể chất</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-utensils feature-icon"></i>
+                                <span>Ăn uống đủ chất – chăm sóc tận tình</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-clock feature-icon"></i>
+                                <span>Phù hợp phụ huynh công sở (gửi sáng – đón chiều)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Program Card 2 -->
+                <div class="program-card animate animate-delay-1">
+                    <div class="program-img program-img-2"></div>
+                    <div class="program-content">
+                        <h3 class="program-title">SUPER CAMP HÈ 2025</h3>
+                        <p>Rèn bản lĩnh, khai phóng nội lực</p>
+                        <div class="program-features">
+                            <div class="feature-item">
+                                <i class="fas fa-fire feature-icon"></i>
+                                <span>Tự tin – Chủ động – Tự lập</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-campground feature-icon"></i>
+                                <span>Kỹ năng sinh tồn, kết nối nhóm, giao tiếp ứng xử</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-heart feature-icon"></i>
+                                <span>Tình bạn đẹp, biết yêu thương và sẻ chia</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Program Card 3 -->
+                <div class="program-card animate animate-delay-2">
+                    <div class="program-img program-img-3"></div>
+                    <div class="program-content">
+                        <h3 class="program-title">CÁC LỚP KỸ NĂNG CHUYÊN SÂU</h3>
+                        <p>Giúp con tỏa sáng theo cách riêng</p>
+                        <div class="program-features">
+                            <div class="feature-item">
+                                <i class="fas fa-microphone feature-icon"></i>
+                                <span>MC Nhí tài năng</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-comment-alt feature-icon"></i>
+                                <span>Giao tiếp – Thuyết trình – Tư duy phản biện</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-book feature-icon"></i>
+                                <span>Viết chữ đẹp – Chuẩn bị vào lớp 1</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-shield-alt feature-icon"></i>
+                                <span>Giáo dục giới tính – Bảo vệ bản thân</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-plus feature-icon"></i>
+                                <span>Toán tư duy Pomath (trẻ 4–11 tuổi)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Skills Section -->
+    <section class="skills">
+        <div class="container">
+            <h2 class="section-title">CÁC KỸ NĂNG CON SẼ PHÁT TRIỂN</h2>
+            <div class="skill-items">
+                <div class="skill-item animate">
+                    <i class="fas fa-brain skill-icon"></i>
+                    <h3 class="skill-title">Tư Duy Sáng Tạo</h3>
+                    <p class="skill-description">Phát triển khả năng giải quyết vấn đề và sáng tạo trong mọi tình huống</p>
+                </div>
+                <div class="skill-item animate animate-delay-1">
+                    <i class="fas fa-handshake skill-icon"></i>
+                    <h3 class="skill-title">Kỹ Năng Xã Hội</h3>
+                    <p class="skill-description">Xây dựng khả năng giao tiếp, làm việc nhóm và lãnh đạo</p>
+                </div>
+                <div class="skill-item animate animate-delay-2">
+                    <i class="fas fa-dumbbell skill-icon"></i>
+                    <h3 class="skill-title">Sức Khỏe Thể Chất</h3>
+                    <p class="skill-description">Rèn luyện sức khỏe thông qua các hoạt động vận động và thể thao</p>
+                </div>
+                <div class="skill-item animate">
+                    <i class="fas fa-heart skill-icon"></i>
+                    <h3 class="skill-title">Phát Triển Cảm Xúc</h3>
+                    <p class="skill-description">Học cách nhận biết và kiểm soát cảm xúc của bản thân</p>
+                </div>
+                <div class="skill-item animate animate-delay-1">
+                    <i class="fas fa-globe skill-icon"></i>
+                    <h3 class="skill-title">Kiến Thức Toàn Cầu</h3>
+                    <p class="skill-description">Mở rộng hiểu biết về thế giới xung quanh</p>
+                </div>
+                <div class="skill-item animate animate-delay-2">
+                    <i class="fas fa-search skill-icon"></i>
+                    <h3 class="skill-title">Tư Duy Phản Biện</h3>
+                    <p class="skill-description">Phát triển khả năng phân tích và đánh giá thông tin</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">LỢI ÍCH KHI THAM GIA</h2>
+            <div class="benefit-content">
+                <div class="benefit-image animate"></div>
+                <div class="benefit-text">
+                    <h3 class="benefit-title animate">Con học vui – Mẹ an tâm – Cả nhà hạnh phúc!</h3>
+                    <p class="benefit-description animate animate-delay-1">Không phải học thêm, không phải lấp thời gian trống... Mùa hè ở Harvard là một chuyến hành trình để con "vừa sống vừa lớn lên".</p>
+                    <ul class="benefit-list">
+                        <li class="benefit-item animate">
+                            <i class="fas fa-check-circle benefit-icon"></i>
+                            <div class="benefit-item-text">Môi trường an toàn, chuyên nghiệp với đội ngũ giáo viên giàu kinh nghiệm</div>
+                        </li>
+                        <li class="benefit-item animate animate-delay-1">
+                            <i class="fas fa-check-circle benefit-icon"></i>
+                            <div class="benefit-item-text">Chương trình học được thiết kế khoa học, phù hợp với lứa tuổi</div>
+                        </li>
+                        <li class="benefit-item animate animate-delay-2">
+                            <i class="fas fa-check-circle benefit-icon"></i>
+                            <div class="benefit-item-text">Giúp con phát triển toàn diện về thể chất, trí tuệ và tình cảm</div>
+                        </li>
+                        <li class="benefit-item animate">
+                            <i class="fas fa-check-circle benefit-icon"></i>
+                            <div class="benefit-item-text">Xây dựng nền tảng kỹ năng sống vững chắc cho tương lai</div>
+                        </li>
+                        <li class="benefit-item animate animate-delay-1">
+                            <i class="fas fa-check-circle benefit-icon"></i>
+                            <div class="benefit-item-text">Phát hiện và phát triển tài năng tiềm ẩn của con</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Promotion Section -->
+    <section class="promotion">
+        <div class="container">
+            <h2 class="promotion-title animate">ƯU ĐÃI ĐẶC BIỆT</h2>
+            <p class="promotion-description animate animate-delay-1">Giảm <span class="highlight">10%</span> học phí cho học sinh đăng ký sớm trước ngày <span class="highlight">10/6/2025</span>!</p>
+            <a href="#register" class="btn animate animate-delay-2">ĐĂNG KÝ NGAY</a>
+        </div>
+    </section>
+    
+    <!-- Registration Form -->
+    <section class="registration" id="register">
+        <div class="container">
+            <h2 class="section-title animate">ĐĂNG KÝ TƯ VẤN MIỄN PHÍ</h2>
+            <div class="form-container">
+                <form id="registration-form">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">Họ tên phụ huynh</label>
+                                <input type="text" class="form-input" placeholder="Nhập họ và tên" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-input" placeholder="Nhập số điện thoại" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input" placeholder="Nhập email" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">Tên học sinh</label>
+                                <input type="text" class="form-input" placeholder="Nhập tên học sinh" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Chọn chương trình</label>
+                        <select class="form-select" required>
+                            <option value="">Chọn chương trình</option>
+                            <option value="ban-tru">Bán Trú Hè</option>
+                            <option value="super-camp">Super Camp Hè 2025</option>
+                            <option value="ky-nang">Lớp Kỹ Năng Chuyên Sâu</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ghi chú thêm (nếu có)</label>
+                        <textarea class="form-input" rows="4" placeholder="Nhập ghi chú"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn animate">GỬI ĐĂNG KÝ</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Về Chúng Tôi</h3>
+                <p>Công Ty TNHH Giáo Dục Harvard cam kết mang đến những chương trình giáo dục chất lượng, giúp trẻ phát triển toàn diện.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Liên Hệ</h3>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone-alt footer-contact-icon"></i>
+                    <span class="footer-contact-text">0975 917 397</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope footer-contact-icon"></i>
+                    <span class="footer-contact-text">ducharvard@gmail.com</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt footer-contact-icon"></i>
+                    <span class="footer-contact-text">123 Đường ABC, Quận 1, TP.HCM</span>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Liên Kết Nhanh</h3>
+                <ul>
+                    <li><a href="#programs" style="color: var(--white); text-decoration: none;">Chương Trình</a></li>
+                    <li><a href="#register" style="color: var(--white); text-decoration: none;">Đăng Ký</a></li>
+                    <li><a href="#benefits" style="color: var(--white); text-decoration: none;">Lợi Ích</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 Công Ty TNHH Giáo Dục Harvard. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('registration-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Cảm ơn bạn đã đăng ký! Chúng tôi sẽ liên hệ sớm nhất có thể.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
